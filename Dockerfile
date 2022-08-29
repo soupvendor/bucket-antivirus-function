@@ -23,7 +23,8 @@ RUN rm -rf /root/.cache/pip
 # Download libraries we need to run in lambda
 WORKDIR /tmp
 RUN yumdownloader --archlist=aarch64 clamav clamav-lib clamav-update json-c pcre2 libprelude gnutls nettle \
-    libtool-ltdl libxml2 xz-libs binutils libcurl libtool-ltdl libnghttp2 libidn2 libssh2
+libtool-ltdl libxml2 xz-libs binutils libcurl libtool-ltdl libnghttp2 libidn2 libssh2
+
 RUN rpm2cpio clamav-0*.rpm | cpio -idmv
 RUN rpm2cpio clamav-lib*.rpm | cpio -idmv
 RUN rpm2cpio clamav-update*.rpm | cpio -idmv
@@ -42,7 +43,7 @@ RUN rpm2cpio libssh2* | cpio -idmv
 RUN rpm2cpio binutils* | cpio -idmv
 
 # Copy over the binaries and libraries
-RUN cp /tmp/usr/bin/clamscan /tmp/usr/bin/freshclam /tmp/usr/lib64/* /opt/app/bin/
+RUN cp /tmp/usr/bin/clamscan /tmp/usr/bin/freshclam /tmp/usr/lib64/* /tmp/usr/bin/ld.bfd /opt/app/bin/
 RUN cp /usr/lib64/libldap-2.4.so.2 \
     /usr/lib64/libunistring.so.0 \
     /usr/lib64/libsasl2.so.3 \
@@ -51,7 +52,6 @@ RUN cp /usr/lib64/libldap-2.4.so.2 \
     /usr/lib64/libsmime3.so \
     /usr/lib64/libnss3.so \
     /usr/lib64/libcrypt.so.1 \
-    /usr/lib64/ld.bfd \
     /opt/app/bin/
 
 # Fix the freshclam.conf settings
