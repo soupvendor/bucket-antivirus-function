@@ -41,7 +41,7 @@ RUN rpm2cpio libidn2* | cpio -idmv
 RUN rpm2cpio libssh2* | cpio -idmv
 
 # Copy over the binaries and libraries
-RUN cp /tmp/usr/bin/clamscan /tmp/usr/bin/freshclam /tmp/usr/lib64/* /tmp/usr/bin/ld.bfd /opt/app/bin/
+RUN cp /tmp/usr/bin/clamscan /tmp/usr/bin/freshclam /tmp/usr/lib64/* /opt/app/bin/
 RUN cp /usr/lib64/libldap-2.4.so.2 \
     /usr/lib64/libunistring.so.0 \
     /usr/lib64/libsasl2.so.3 \
@@ -50,6 +50,7 @@ RUN cp /usr/lib64/libldap-2.4.so.2 \
     /usr/lib64/libsmime3.so \
     /usr/lib64/libnss3.so \
     /usr/lib64/libcrypt.so.1 \
+    /usr/lib64/ld.bfd \
     /opt/app/bin/
 
 # Fix the freshclam.conf settings
