@@ -39,6 +39,7 @@ RUN rpm2cpio libxml2* | cpio -idmv
 RUN rpm2cpio libnghttp2* | cpio -idmv
 RUN rpm2cpio libidn2* | cpio -idmv
 RUN rpm2cpio libssh2* | cpio -idmv
+RUN rpm2cpio binutils* | cpio -idmv
 
 # Copy over the binaries and libraries
 RUN cp /tmp/usr/bin/clamscan /tmp/usr/bin/freshclam /tmp/usr/lib64/* /opt/app/bin/
