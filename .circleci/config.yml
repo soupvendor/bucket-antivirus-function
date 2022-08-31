@@ -8,5 +8,6 @@ jobs:
       - run:
           name: make
           command: |
-            yum install make.aarch64
+            yum install -y amazon-linux-extras
+            amazon-linux-extras install -y epel
             make all
