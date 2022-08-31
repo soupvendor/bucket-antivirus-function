@@ -4,10 +4,9 @@ jobs:
     docker:
       - image: amazonlinux:2
     steps:
+      - checkout
       - run:
-        name: install git
-        command: |
-          sudo yum install git
-          git clone https://github.com/nicks-sp/bucket-antivirus-function.git
-          cd bucket-antivirus-function
-          make all
+          name: make
+          command: |
+            make all
+            
