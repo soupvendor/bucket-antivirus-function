@@ -10,8 +10,4 @@ jobs:
           sudo yum install git
           git clone https://github.com/nicks-sp/bucket-antivirus-function.git
           cd bucket-antivirus-function
-      - run:
-        name: make zip
-        command: |
           make all
-          
