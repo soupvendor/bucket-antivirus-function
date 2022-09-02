@@ -5,7 +5,7 @@ jobs:
       - image: amazonlinux:2
     steps:
       - checkout
-      - run: |
+      - run: |-
             yum install -y yum-utils
             yumdownloader --archlist=aarch64 make
             make all
