@@ -1,18 +1,16 @@
 version: 2.1
 jobs:
   build:
-    resource_class: arm.medium
-    machine:
-      image: ubuntu-2004:current
+    docker:
+      image: nickseldnersp/arm64-clamav:1
+      auth:
+        username: nickseldnersp
+        password: $DOCKERHUB_PASSWORD
 
     steps:
       - checkout
       - run: 
           name: "Install dependencies"
           command: |
-            sudo apt update
-            sudo apt -y install dnf
-            sudo dnf install -y  --forcearch=aarch64 cpio python3-pip yum-utils zip unzip less
-            sudo subscription-manager repos --enable codeready-builder-for-rhel-8-$(arch)-rpms
-            sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
-            echo "complete!"
+            yum update -y
+            yum install -y cpio python3-pip yum-utils zip unzip less
