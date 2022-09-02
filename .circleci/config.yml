@@ -12,8 +12,7 @@ jobs:
           command: |
             sudo apt update
             sudo apt -y install dnf
-            sudo dnf install -y cpio python3-pip yum-utils zip unzip less
-            sudo dnf install -y amazon-linux-extras
+            sudo dnf install -y  --forcearch=aarch64 cpio python3-pip yum-utils zip unzip less
             sudo subscription-manager repos --enable codeready-builder-for-rhel-8-$(arch)-rpms
             sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
             echo "complete!"
