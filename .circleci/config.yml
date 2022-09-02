@@ -20,7 +20,7 @@ jobs:
             pip3 install -r requirements.txt
             rm -rf /root/.cache/pip
             yumdownloader --archlist=aarch64 clamav clamav-lib clamav-update json-c pcre2 libprelude gnutls nettle \
-libtool-ltdl libxml2 xz-libs binutils libcurl libtool-ltdl libnghttp2 libidn2 libssh2
+            libtool-ltdl libxml2 xz-libs binutils libcurl libtool-ltdl libnghttp2 libidn2 libssh2
             rpm2cpio clamav-0*.rpm | cpio -idmv
             rpm2cpio clamav-lib*.rpm | cpio -idmv
             rpm2cpio clamav-update*.rpm | cpio -idmv
