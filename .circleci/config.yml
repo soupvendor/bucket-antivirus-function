@@ -1,59 +1,18 @@
 version: 2.1
 jobs:
   build:
+    resource_class: arm.medium
     machine:
       image: ubuntu-2004:current
-    resource_class: arm.medium
 
     steps:
       - checkout
-      - run: |
-            sudo mkdir -p /opt/app
-            sudo mkdir -p /opt/app/build
-            sudo mkdir -p /opt/app/bin/
-            sudo cp ./*.py /opt/app/
-            sudo cp requirements.txt /opt/app/requirements.txt
-            sudo yum update -y
-            sudo yum install -y cpio python3-pip yum-utils zip unzip less
-            sudo yum install -y amazon-linux-extras
-            sudo amazon-linux-extras install -y epel
-            cd /opt/app
-            sudo pip3 install -r requirements.txt
-            sudo rm -rf /root/.cache/pip
-            sudo yumdownloader --archlist=aarch64 clamav clamav-lib clamav-update json-c pcre2 libprelude gnutls nettle \
-            libtool-ltdl libxml2 xz-libs binutils libcurl libtool-ltdl libnghttp2 libidn2 libssh2
-            sudo rpm2cpio clamav-0*.rpm | cpio -idmv
-            sudo rpm2cpio clamav-lib*.rpm | cpio -idmv
-            sudo rpm2cpio clamav-update*.rpm | cpio -idmv
-            sudo rpm2cpio json-c*.rpm | cpio -idmv
-            sudo rpm2cpio pcre*.rpm | cpio -idmv
-            sudo rpm2cpio gnutls* | cpio -idmv
-            sudo rpm2cpio nettle* | cpio -idmv
-            sudo rpm2cpio lib* | cpio -idmv
-            sudo rpm2cpio *.rpm | cpio -idmv
-            sudo rpm2cpio xz-libs* | cpio -idmv
-            sudo rpm2cpio libtool* | cpio -idmv
-            sudo rpm2cpio libxml2* | cpio -idmv
-            sudo rpm2cpio libnghttp2* | cpio -idmv
-            sudo rpm2cpio libidn2* | cpio -idmv
-            sudo rpm2cpio libssh2* | cpio -idmv
-            sudo rpm2cpio binutils* | cpio -idmv
-            sudo cp /tmp/usr/bin/clamscan /tmp/usr/bin/freshclam /tmp/usr/lib64/* /tmp/usr/bin/ld.bfd /opt/app/bin/
-            sudo cp /usr/lib64/libldap-2.4.so.2 \
-            /usr/lib64/libunistring.so.0 \
-            /usr/lib64/libsasl2.so.3 \
-            /usr/lib64/liblber-2.4.so.2 \
-            /usr/lib64/libssl3.so \
-            /usr/lib64/libsmime3.so \
-            /usr/lib64/libnss3.so \
-            /usr/lib64/libcrypt.so.1 \
-            /opt/app/bin/
-            sudo echo "DatabaseMirror database.clamav.net" > /opt/app/bin/freshclam.conf
-            sudo echo "CompressLocalDatabase yes" >> /opt/app/bin/freshclam.conf
-            cd /opt/app 
-            sudo zip -r9 --exclude="*test*" /opt/app/build/lambda.zip *.py bin
-            cd /usr/local/lib/python3.7/site-packages
-            sudo zip -r9 /opt/app/build/lambda.zip *
-            cd /opt/app
-
-
+      - run: 
+          name: "Install dependencies"
+          command: |
+            sudo dnf update -y 
+            sudo dnf install -y cpio python3-pip yum-utils zip unzip less
+            sudo dnf install -y amazon-linux-extras
+            sudo subscription-manager repos --enable codeready-builder-for-rhel-8-$(arch)-rpms
+            sudo dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
+            echo "complete!"
