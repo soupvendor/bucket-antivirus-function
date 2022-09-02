@@ -6,6 +6,8 @@ jobs:
     steps:
       - checkout
       - run: |-
-            yum install -y yum-utils make
+            yum install -y make docker
+            service docker restart
+            usermod -a _G docker ec2-user
             make all
-
+            ll
