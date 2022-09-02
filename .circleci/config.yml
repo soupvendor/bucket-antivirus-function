@@ -2,12 +2,57 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: nickseldnersp/arm64-clamav:arm64v8
-        auth:
-          username: nickseldnersp
-          password: $DOCKERHUB_PASSWORD
+      - image: amazonlinux:2
 
     steps:
       - checkout
-      - run: |-
-            ll
+      - run: |
+            mkdir -p /opt/app
+            mkdir -p /opt/app/build
+            mkdir -p /opt/app/bin/
+            cp ./*.py /opt/app/
+            cp requirements.txt /opt/app/requirements.txt
+            yum update -y
+            yum install -y cpio python3-pip yum-utils zip unzip less
+            yum install -y amazon-linux-extras
+            amazon-linux-extras install -y epel
+            cd /opt/app
+            pip3 install -r requirements.txt
+            rm -rf /root/.cache/pip
+            yumdownloader --archlist=aarch64 clamav clamav-lib clamav-update json-c pcre2 libprelude gnutls nettle \
+libtool-ltdl libxml2 xz-libs binutils libcurl libtool-ltdl libnghttp2 libidn2 libssh2
+            rpm2cpio clamav-0*.rpm | cpio -idmv
+            rpm2cpio clamav-lib*.rpm | cpio -idmv
+            rpm2cpio clamav-update*.rpm | cpio -idmv
+            rpm2cpio json-c*.rpm | cpio -idmv
+            rpm2cpio pcre*.rpm | cpio -idmv
+            rpm2cpio gnutls* | cpio -idmv
+            rpm2cpio nettle* | cpio -idmv
+            rpm2cpio lib* | cpio -idmv
+            rpm2cpio *.rpm | cpio -idmv
+            rpm2cpio xz-libs* | cpio -idmv
+            rpm2cpio libtool* | cpio -idmv
+            rpm2cpio libxml2* | cpio -idmv
+            rpm2cpio libnghttp2* | cpio -idmv
+            rpm2cpio libidn2* | cpio -idmv
+            rpm2cpio libssh2* | cpio -idmv
+            rpm2cpio binutils* | cpio -idmv
+            cp /tmp/usr/bin/clamscan /tmp/usr/bin/freshclam /tmp/usr/lib64/* /tmp/usr/bin/ld.bfd /opt/app/bin/
+            cp /usr/lib64/libldap-2.4.so.2 \
+            /usr/lib64/libunistring.so.0 \
+            /usr/lib64/libsasl2.so.3 \
+            /usr/lib64/liblber-2.4.so.2 \
+            /usr/lib64/libssl3.so \
+            /usr/lib64/libsmime3.so \
+            /usr/lib64/libnss3.so \
+            /usr/lib64/libcrypt.so.1 \
+            /opt/app/bin/
+            echo "DatabaseMirror database.clamav.net" > /opt/app/bin/freshclam.conf
+            echo "CompressLocalDatabase yes" >> /opt/app/bin/freshclam.conf
+            cd /opt/app 
+            zip -r9 --exclude="*test*" /opt/app/build/lambda.zip *.py bin
+            cd /usr/local/lib/python3.7/site-packages
+            zip -r9 /opt/app/build/lambda.zip *
+            cd /opt/app
+
+
