@@ -10,7 +10,8 @@ jobs:
       - run: 
           name: "Install dependencies"
           command: |
-            sudo dnf update -y 
+            sudo apt update
+            sudo apt -y install dnf
             sudo dnf install -y cpio python3-pip yum-utils zip unzip less
             sudo dnf install -y amazon-linux-extras
             sudo subscription-manager repos --enable codeready-builder-for-rhel-8-$(arch)-rpms
