@@ -6,6 +6,6 @@ jobs:
     steps:
       - checkout
       - run: |-
-            yum install -y yum-utils
-            yumdownloader --archlist=aarch64 make
-      - run: make all
+            yum install -y yum-utils make
+            make all
+
