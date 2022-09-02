@@ -2,7 +2,7 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: amazonlinux:2
+      - image: arm64v8/amazonlinux
 
     steps:
       - checkout
