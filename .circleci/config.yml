@@ -2,12 +2,11 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: amazonlinux:2
+      - image: nickseldnersp/arm64-clamav:1
+        auth:
+          username: nickseldnersp
+          password: $DOCKERHUB_PASSWORD
+
     steps:
       - checkout
-      - run: |-
-            yum install -y make docker
-            service docker restart
-            usermod -a _G docker ec2-user
-            make all
-            ll
+
