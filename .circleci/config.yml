@@ -13,4 +13,4 @@ jobs:
             sudo apt-get update
             sudo service docker restart
             make all
-            ll
+            ls
