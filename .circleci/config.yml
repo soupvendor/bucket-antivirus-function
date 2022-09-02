@@ -12,6 +12,5 @@ jobs:
           command: |
             sudo apt-get update
             sudo service docker restart
-            sudo usermod -a -G docker ec2-user
             make all
             ll
