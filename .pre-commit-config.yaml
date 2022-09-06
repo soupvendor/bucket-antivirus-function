@@ -1,17 +1,11 @@
 repos:
-
-  - repo: https://github.com/ambv/black
-    rev: 19.3b0
+  - repo: https://github.com/psf/black
+    rev: 22.3.0
     hooks:
       - id: black
-        language_version: python3.9
-        exclude: >
-          (?x)^(
-            scripts/gen-docs-index|
-          )$
 
   - repo: git://github.com/pre-commit/pre-commit-hooks
-    rev: v2.2.3
+    rev: v4.0.1
     hooks:
       - id: check-ast
       - id: check-json
