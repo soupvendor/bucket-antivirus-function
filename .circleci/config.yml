@@ -22,7 +22,6 @@ jobs:
           command: make all
 
   aws-cred-set-and-sync:
-    executor: aws-s3/default
     steps:
       - checkout
       - aws-s3/sync:
