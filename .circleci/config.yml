@@ -20,7 +20,7 @@ jobs:
       - run:
           name: "make zip"
           command: make all
-  
+
   aws-cred-set-and-sync:
     executor: aws-cli/default
     steps:
