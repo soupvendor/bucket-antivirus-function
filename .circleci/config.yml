@@ -17,21 +17,21 @@ jobs:
     executor: build
     steps:
       - checkout
-      - run: 
+      - run:
           name: "make zip"
           command: make all
 
       - aws-s3/sync:
           from: ./build/lambda.zip
           to: 's3://immortal-soup-59'
-  
+
   pre-commit-deps:
     executor: pre-commit-test
     steps:
       - checkout
       - run: pip3 install pre-commit
       - run: pre-commit install-hooks
-  
+
   pre-commit-test:
     executor: pre-commit-test
     steps:
@@ -41,9 +41,9 @@ jobs:
           name: Run pre-commit tests
           command: pre-commit run --all-files
 
-workflows: 
+workflows:
   version: 2
-  
+
   make-sync-zip:
     jobs:
       - pre-commit-deps
