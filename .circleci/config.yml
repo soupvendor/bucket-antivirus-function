@@ -10,7 +10,7 @@ executors:
       - image: cimg/python:3.9.13
 
 orbs:
-  aws-s3: circleci/aws-s3@3.0
+  aws-cli: circleci/aws-cli@2.0
 
 jobs:
   build:
@@ -20,9 +20,17 @@ jobs:
       - run:
           name: "make zip"
           command: make all
-
+  
+  aws-cred-set-and-sync:
+    executor: aws-cli/default
+    steps:
+      - checkout
+      - aws-cli/setup:
+          aws-access-key-id: AWS_ACCESS_KEY
+          aws-secret-access-key: AWS_SECRET_KEY
+          aws-region: AWS_REGION
       - aws-s3/sync:
-          from: ./build/lambda.zip
+          from: ./build/
           to: 's3://immortal-soup-59'
 
   pre-commit-deps:
