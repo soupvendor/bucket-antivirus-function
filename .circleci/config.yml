@@ -30,7 +30,7 @@ jobs:
     steps:
       - checkout
       - run: pip3 install pre-commit
-      - run: sudo pre-commit install-hooks
+      - run: pre-commit install-hooks
   
   pre-commit-test:
     executor: pre-commit-test
@@ -39,7 +39,7 @@ jobs:
       - run: pip3 install pre-commit
       - run:
           name: Run pre-commit tests
-          command: sudo pre-commit run --all-files
+          command: pre-commit run --all-files
 
 workflows: 
   version: 2
