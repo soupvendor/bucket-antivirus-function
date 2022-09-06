@@ -25,12 +25,11 @@ jobs:
     executor: aws-cli/default
     steps:
       - checkout
-      - aws-s3/setup:
+      - aws-s3/sync:
           aws-access-key-id: AWS_ACCESS_KEY
           aws-secret-access-key: AWS_SECRET_KEY
           aws-region: AWS_REGION
-      - aws-s3/sync:
-          from: ./build/
+          from: /build/
           to: 's3://immortal-soup-59'
 
   pre-commit-deps:
