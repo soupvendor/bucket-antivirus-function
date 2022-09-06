@@ -29,14 +29,14 @@ jobs:
     executor: pre-commit-test
     steps:
       - checkout
-      - run: sudo pip install pre-commit
+      - run: pip3 install pre-commit
       - run: sudo pre-commit install-hooks
   
   pre-commit-test:
     executor: pre-commit-test
     steps:
       - checkout
-      - run: sudo pip install pre-commit
+      - run: pip3 install pre-commit
       - run:
           name: Run pre-commit tests
           command: sudo pre-commit run --all-files
