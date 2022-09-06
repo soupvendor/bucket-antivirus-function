@@ -51,5 +51,5 @@ workflows:
           requires:
             - pre-commit-deps
       - build:
-        requires:
-          - pre-commit-test
+          requires:
+            - pre-commit-test
