@@ -15,7 +15,6 @@ orbs:
 jobs:
   build:
     executor: build
-  
     steps:
       - checkout
       - run: 
@@ -43,14 +42,14 @@ jobs:
           command: pre-commit run --all-files
 
 workflows: 
+  version: 2
+  
   make-sync-zip:
     jobs:
       - pre-commit-deps
       - pre-commit test:
           requires:
             - pre-commit-deps
-      - test
       - build:
         requires:
           - pre-commit-test
-          - test
