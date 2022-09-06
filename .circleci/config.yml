@@ -11,15 +11,35 @@ jobs:
       - checkout
       - run: 
           name: "make zip"
-          command: |
-            sudo apt-get update
-            sudo service docker restart
-            make all
+          command: make all
 
       - aws-s3/sync:
           from: ./build/lambda.zip
           to: 's3://immortal-soup-59'
+  
+  pre-commit-deps:
+    steps:
+      - checkout
+      - run: pip install pre-commit
+      - run: pre-commit install-hooks
+  
+  pre-commit-test:
+    steps:
+      - checkout
+      - run: pip install pre-commit
+      - run:
+          name: Run pre-commit tests
+          command: pre-commit run --all-files
+
 workflows: 
   make-sync-zip:
     jobs:
-      - build
+      - pre-commit-deps
+      - pre-commit test:
+          requires:
+            - pre-commit-deps
+      - test
+      - build:
+        requires:
+          - pre-commit-test
+          - test
