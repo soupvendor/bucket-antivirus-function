@@ -24,7 +24,7 @@ jobs:
           aws-access-key-id: AWS_ACCESS_KEY
           aws-secret-access-key: AWS_SECRET_KEY
           aws-region: AWS_REGION
-          from: /build/
+          from: ./build/
           to: 's3://immortal-soup-59'
 
   pre-commit-deps:
