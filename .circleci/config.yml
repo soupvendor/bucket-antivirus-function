@@ -47,7 +47,7 @@ workflows:
   make-sync-zip:
     jobs:
       - pre-commit-deps
-      - pre-commit test:
+      - pre-commit-test:
           requires:
             - pre-commit-deps
       - build:
