@@ -1,11 +1,20 @@
 version: 2.1
-orbs:
-  aws-s3: circleci/aws-s3@3.0
-jobs:
+
+executors:
   build:
     resource_class: arm.medium
     machine:
       image: ubuntu-2004:current
+  pre-commit-test:
+    docker:
+      - image: cimg/python:3.9.13
+
+orbs:
+  aws-s3: circleci/aws-s3@3.0
+
+jobs:
+  build:
+    executor: build
   
     steps:
       - checkout
@@ -18,12 +27,14 @@ jobs:
           to: 's3://immortal-soup-59'
   
   pre-commit-deps:
+    executor: pre-commit-test
     steps:
       - checkout
       - run: pip install pre-commit
       - run: pre-commit install-hooks
   
   pre-commit-test:
+    executor: pre-commit-test
     steps:
       - checkout
       - run: pip install pre-commit
