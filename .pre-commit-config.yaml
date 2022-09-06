@@ -1,6 +1,7 @@
 repos:
 
   - repo: https://github.com/ambv/black
+    rev: 19.3b0
     hooks:
       - id: black
         language_version: python3.9
@@ -10,6 +11,7 @@ repos:
           )$
 
   - repo: git://github.com/pre-commit/pre-commit-hooks
+    rev: v2.2.3
     hooks:
       - id: check-ast
       - id: check-json
