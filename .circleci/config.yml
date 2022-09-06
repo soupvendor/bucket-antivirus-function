@@ -1,16 +1,25 @@
 version: 2.1
+orbs:
+  aws-s3: circleci/aws-s3@3.0
 jobs:
   build:
     resource_class: arm.medium
     machine:
       image: ubuntu-2004:current
-
+  
     steps:
       - checkout
       - run: 
-          name: "Install dependencies"
+          name: "make zip"
           command: |
             sudo apt-get update
             sudo service docker restart
             make all
-            ls
+
+      - aws-s3/sync:
+          from: ./build/lambda.zip
+          to: 's3://immortal-soup-59'
+workflows: 
+  make-sync-zip:
+    jobs:
+      - build
