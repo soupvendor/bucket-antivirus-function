@@ -10,22 +10,28 @@ executors:
       - image: cimg/python:3.9.13
 
 orbs:
-  aws-s3: circleci/aws-s3@3.0
+  aws-cli: circleci/aws-cli@3.1
 
 jobs:
   build:
     executor: build
+    environment:
+      AWS_DEFAULT_REGION: us-east-1
+      AWS_ROLE_ARN: AWS_ROLE_ARN
     steps:
       - checkout
       - run:
           name: "make zip"
           command: make all
-      - aws-s3/sync:
-          aws-access-key-id: AWS_ACCESS_KEY
-          aws-secret-access-key: AWS_SECRET_KEY
-          aws-region: AWS_REGION
-          from: ./build/
-          to: 's3://immortal-soup-59'
+      - aws-cli/setup:
+          profile-name: CircleCI-Job-Role
+          role-arn: AWS_ROLE_ARN
+          role-session-name: example-session
+      - run:
+          name: Copy function to bucket
+          command: aws s3 get-login-password --region AWS_DEFAULT_REGION --profile CircleCI-Job-Role sync ./build/ s3://immortal-soup-59
+          # from: ./build/
+          # to: 's3://immortal-soup-59'
 
   pre-commit-deps:
     executor: pre-commit-test
