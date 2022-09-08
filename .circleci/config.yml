@@ -23,16 +23,21 @@ jobs:
       - run:
           name: "make zip"
           command: make all
-      - aws-cli/setup:
-          profile-name: CircleCI-Job-Role
-          role-arn: AWS_ROLE_ARN
-          role-session-name: example-session
       - run:
-          name: Copy function to bucket
-          command: aws s3 get-login-password --region AWS_DEFAULT_REGION --profile CircleCI-Job-Role sync ./build/ s3://immortal-soup-59
+          name: authenticate-and-interact
+          command: |
+            read -r AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN \<<< \
+              $(aws sts assume-role-with-web-identity \
+               --role-arn ${AWS_ROLE_ARN} \
+               --role-session-name "CircleCI-${CIRCLE_WORKFLOW_ID}-${CIRCLE_JOB}" \
+               --web-identity-token $CIRCLE_OIDC_TOKEN \
+               --duration-seconds 3600 \
+               --query 'Credentials.[AccessKeyId,SecretAccessKey,SessionToken]' \
+               --output text)
+            export AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY AWS_SESSION_TOKEN
+            aws s3 sync ./build/ 's3://immortal-soup-59'
           # from: ./build/
           # to: 's3://immortal-soup-59'
-
   pre-commit-deps:
     executor: pre-commit-test
     steps:
