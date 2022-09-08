@@ -64,5 +64,7 @@ workflows:
           requires:
             - pre-commit-deps
       - build:
+          context:
+            - my-context
           requires:
             - pre-commit-test
