@@ -17,12 +17,11 @@ jobs:
     executor: build
     environment:
       AWS_DEFAULT_REGION: us-east-1
-      AWS_ROLE_ARN: AWS_ROLE_ARN
     steps:
       - checkout
       - aws-cli/setup:
           profile-name: WEB-IDENTITY-PROFILE
-          role-arn: AWS_ROLE_ARN
+          role-arn: CIRCLECI_ROLE_ARN
           role-session-name: example-session
       - run:
           name: "make zip"
