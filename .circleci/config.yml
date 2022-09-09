@@ -20,15 +20,13 @@ jobs:
     steps:
       - checkout
       - aws-cli/setup:
-          profile-name: WEB-IDENTITY-PROFILE
           role-arn: $CIRCLECI_ROLE_ARN
-          role-session-name: example-session
       - run:
           name: "make zip"
           command: make all
       - run:
-          name: sync zip file
-          command: aws s3 --region $AWS_DEFAULT_REGION sync ./build/ 's3://immortal-soup-59'
+          name: copy zip file
+          command: aws s3 cp ./build/ 's3://immortal-soup-59'
 
   pre-commit-deps:
     executor: pre-commit-test
