@@ -28,7 +28,7 @@ jobs:
           command: make all
       - run:
           name: sync zip file
-          command: aws s3 get-login-password --region AWS_DEFAULT_REGION --profile WEB_IDENTITY_PROFILE sync ./build/ 's3://immortal-soup-59'
+          command: aws s3 --region $AWS_DEFAULT_REGION sync ./build/ 's3://immortal-soup-59'
 
   pre-commit-deps:
     executor: pre-commit-test
