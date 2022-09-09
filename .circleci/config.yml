@@ -17,16 +17,16 @@ jobs:
     executor: build
     environment:
       AWS_DEFAULT_REGION: us-east-1
-      AWS_ROLE_ARN: AWS_ROLE_ARN
+      AWS_ROLE_ARN: $AWS_ROLE_ARN
     steps:
       - checkout
-      - run:
-          name: "make zip"
-          command: make all
       - aws-cli/setup:
           profile-name: WEB-IDENTITY-PROFILE
           role-arn: AWS_ROLE_ARN
           role-session-name: example-session
+      - run:
+          name: "make zip"
+          command: make all
       - run:
           name: sync zip file
           command: aws s3 get-login-password --region AWS_DEFAULT_REGION --profile WEB_IDENTITY_PROFILE sync ./build/ 's3://immortal-soup-59'
@@ -58,6 +58,6 @@ workflows:
             - pre-commit-deps
       - build:
           context:
-            - AWS-CONTEXT
+            - aws
           requires:
             - pre-commit-test
