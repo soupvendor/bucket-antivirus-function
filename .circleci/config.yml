@@ -21,7 +21,7 @@ jobs:
       - checkout
       - aws-cli/setup:
           profile-name: WEB-IDENTITY-PROFILE
-          role-arn: CIRCLECI_ROLE_ARN
+          role-arn: $CIRCLECI_ROLE_ARN
           role-session-name: example-session
       - run:
           name: "make zip"
