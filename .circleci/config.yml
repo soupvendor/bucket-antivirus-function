@@ -1,5 +1,10 @@
 version: 2.1
 
+parameters:
+  condition_needed:
+    default: REQUIRE_UPDATE
+    type: env_var_name
+
 executors:
   build:
     resource_class: arm.medium
@@ -13,6 +18,17 @@ orbs:
   aws-cli: circleci/aws-cli@3.1
 
 jobs:
+  check-update:
+    executor: build
+    steps:
+      when:
+        condition:
+          equal: [ true, "${<< parameters.condition_needed >>}" ]
+      steps:
+        - checkout
+        - run:
+            name: check version update
+            command: docker run -t bucket-antivirus-function yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | python3 ./scripts/check-update.py >> "$REQUIRE_UPDATE"
   build:
     executor: build
     environment:
@@ -22,7 +38,7 @@ jobs:
       - aws-cli/setup:
           role-arn: $CIRCLECI_ROLE_ARN
       - run:
-          name: "make zip"
+          name: make zip
           command: make all
       - run:
           name: copy zip file
@@ -39,13 +55,23 @@ jobs:
     executor: pre-commit-test
     steps:
       - checkout
+      - resorce_cache:
+          keys:
+            - pre-commit-cache-{{ checksum ".pre-commit-config.yaml"  }}
       - run: pip3 install pre-commit
       - run: pre-commit install-hooks
+      - save_cache:
+          key: pre-commit-cache-{{ checksum ".pre-commit-config.yaml"  }}
+          paths:
+            - ~/.cache/pre-commit
 
   pre-commit-test:
     executor: pre-commit-test
     steps:
       - checkout
+      - restore_cache:
+        keys:
+          - pre-commit-cache-{{ checksum ".pre-commit-config.yaml"  }}
       - run: pip3 install pre-commit
       - run:
           name: Run pre-commit tests
@@ -55,6 +81,9 @@ workflows:
   version: 2
 
   make-sync-zip:
+    when:
+      condition:
+        equal: [true, "${"]
     jobs:
       - pre-commit-deps
       - pre-commit-test:
