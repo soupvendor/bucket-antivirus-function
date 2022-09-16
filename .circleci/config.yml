@@ -43,13 +43,6 @@ jobs:
       - run:
           name: copy zip file
           command: aws s3 cp ./build/lambda.zip 's3://immortal-soup-59'
-      - run:
-          name: update functions code
-          command: |
-            aws lambda update-function-code --function-name test-antivirus \
-            --s3-bucket immortal-soup-59 --s3-key lambda.zip
-            aws lambda update-function-code --function-name test-antivirus-updater \
-            --s3-bucket immortal-soup-59 --s3-key lambda.zip
 
   pre-commit-deps:
     executor: pre-commit-test
