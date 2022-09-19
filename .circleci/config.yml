@@ -1,7 +1,5 @@
 version: 2.1
 
-
-
 executors:
   build:
     resource_class: arm.medium
@@ -56,23 +54,21 @@ jobs:
 workflows:
   version: 2
 
-
   check-update:
     jobs:
       - check-update
 
   make-sync-zip:
+    when:
+      condition:
+        equal: [ true, "$REQUIRE_UPDATE" ]
     jobs:
-      when:
-        condition:
-          equal: [ true, "$REQUIRE_UPDATE" ]
-      jobs:
-        - pre-commit-deps
-        - pre-commit-test:
-            requires:
-              - pre-commit-deps
-        - build:
-            context:
-              - aws
-            requires:
-              - pre-commit-test
+      - pre-commit-deps
+      - pre-commit-test:
+          requires:
+            - pre-commit-deps
+      - build:
+          context:
+            - aws
+          requires:
+            - pre-commit-test
