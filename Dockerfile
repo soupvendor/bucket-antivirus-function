@@ -45,12 +45,8 @@ RUN rpm2cpio binutils* | cpio -idmv
 # Copy over the binaries and libraries
 RUN cp /tmp/usr/bin/clamscan /tmp/usr/bin/freshclam /tmp/usr/lib64/* /tmp/usr/bin/ld.bfd /opt/app/bin/
 RUN cp /usr/lib64/libldap-2.4.so.2 \
-    /usr/lib64/libunistring.so.0 \
     /usr/lib64/libsasl2.so.3 \
     /usr/lib64/liblber-2.4.so.2 \
-    /usr/lib64/libssl3.so \
-    /usr/lib64/libsmime3.so \
-    /usr/lib64/libnss3.so \
     /usr/lib64/libcrypt.so.1 \
     /opt/app/bin/
 
@@ -62,7 +58,7 @@ RUN echo "CompressLocalDatabase yes" >> /opt/app/bin/freshclam.conf
 WORKDIR /opt/app
 RUN zip -r9 --exclude="*test*" /opt/app/build/lambda.zip *.py bin
 
-WORKDIR /usr/local/lib/python3.7/site-packages
+WORKDIR /usr/local/lib/python3.9/site-packages
 RUN zip -r9 /opt/app/build/lambda.zip *
 
 WORKDIR /opt/app
