@@ -19,7 +19,9 @@ jobs:
       - checkout
       - run:
           name: check version update
-          command: docker run -t bucket-antivirus-function yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | python3 ./scripts/check-update.py >> "$REQUIRE_UPDATE"
+          command: |
+            docker run -t bucket-antivirus-function yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | python3 ./scripts/check-update.py >> "$BASH_ENV"
+            source "$BASH_ENV"
   build:
     executor: build
     environment:
