@@ -55,11 +55,6 @@ jobs:
 
 workflows:
   version: 2
-
-  check-update:
-    jobs:
-      - check-update
-
   make-sync-zip:
     jobs:
       - pre-commit-deps
