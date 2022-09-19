@@ -28,12 +28,13 @@ jobs:
       - checkout
       - aws-cli/setup:
           role-arn: $CIRCLECI_ROLE_ARN
+
       - run:
           name: "make zip"
           command: make all
       - run:
           name: copy zip file
-          command: aws s3 cp ./build/lambda.zip 's3://immortal-soup-59'
+          command: aws s3 cp ./build/lambda.zip 's3://immortal-soup-59/'
 
   pre-commit-deps:
     executor: pre-commit-test

@@ -1,4 +1,4 @@
-FROM amazonlinux:2
+FROM redhat/ubi8
 
 # Set up working directories
 RUN mkdir -p /opt/app
@@ -11,10 +11,10 @@ COPY ./*.py /opt/app/
 COPY requirements.txt /opt/app/requirements.txt
 
 # Install packages
-RUN yum update -y
-RUN yum install -y cpio python3-pip yum-utils zip unzip less
-RUN yum install -y amazon-linux-extras
-RUN amazon-linux-extras install -y epel
+RUN dnf update -y
+RUN dnf install -y cpio python3-pip yum-utils zip unzip less
+RUN subscription-manager repos --enable codeready-builder-for-rhel-8-$(arch)-rpms
+RUN dnf install https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm
 
 # This had --no-cache-dir, tracing through multiple tickets led to a problem in wheel
 RUN pip3 install -r requirements.txt
@@ -22,7 +22,7 @@ RUN rm -rf /root/.cache/pip
 
 # Download libraries we need to run in lambda
 WORKDIR /tmp
-RUN yumdownloader --archlist=aarch64 clamav clamav-lib clamav-update json-c pcre2 libprelude gnutls nettle \
+RUN dnf download --archlist=aarch64 clamav clamav-lib clamav-update json-c pcre2 libprelude gnutls nettle \
 libtool-ltdl libxml2 xz-libs binutils libcurl libtool-ltdl libnghttp2 libidn2 libssh2
 
 RUN rpm2cpio clamav-0*.rpm | cpio -idmv
