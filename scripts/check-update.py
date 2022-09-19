@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 import sys
-import os
 
 
 example = sys.stdin.read()
@@ -21,7 +20,7 @@ def version_compare(versions: str):
     for i in range(len(v1_arr)):
         if v1_arr[i] < v2_arr[i]:
             print(f"Newer version available: {latest}")
-            return os.system("export REQUIRE_UPDATE='true'")
+            return "true"
         else:
             print(f"Already on current version: {current}")
-            return os.system("export REQUIRE-UPDATE='false'")
+            return "false"
