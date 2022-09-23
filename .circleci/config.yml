@@ -2,7 +2,7 @@ version: 2.1
 
 # Shared workspace for passing env variables between jobs
 defaults: &defaults
-  working_directory: /tmp/cci-test
+  working_directory: /tmp/
 
 # Build executor is used for making the arm64 clamav zip, version-check is to compare latest version before make zip
 executors:
@@ -26,7 +26,6 @@ jobs:
     executor: version-check
     steps:
       - run: mkdir -p workspace
-      - run: pwd
       - run: |
           yum update -y
           yum install tar -y && yum install gzip -y
@@ -43,8 +42,8 @@ jobs:
       AWS_DEFAULT_REGION: us-east-1
     steps:
       - attach_workspace:
-          at: /tmp/cci-test/workspace
-      - run: cat workspace/shared-env >> "$BASH_ENV"
+          at: /tmp/workspace
+      - run: cat /tmp/workspace/shared-env >> "$BASH_ENV"
 
       - checkout
       - aws-cli/setup:
