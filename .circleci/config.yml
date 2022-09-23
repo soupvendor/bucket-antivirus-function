@@ -2,7 +2,7 @@ version: 2.1
 
 # Shared workspace for passing env variables between jobs
 defaults: &defaults
-  working_directory: /tmp
+  working_directory: /tmp/ci-test
 
 # Build executor is used for making the arm64 clamav zip, version-check is to compare latest version before make zip
 executors:
@@ -44,12 +44,12 @@ jobs:
     environment:
       AWS_DEFAULT_REGION: us-east-1
     steps:
+      - checkout
       - attach_workspace:
-          at: /tmp/workspace
+          at: /tmp/ci-test/workspace
       - run: ls
       - run: cat workspace/shared-env >> $BASH_ENV
 
-      - checkout
       - aws-cli/setup:
           role-arn: $CIRCLECI_ROLE_ARN
       - run:
