@@ -8,6 +8,9 @@ executors:
   pre-commit-test:
     docker:
       - image: cimg/python:3.9.13
+  version-check:
+    docker:
+      - image: cimg/base:2022.09-18.04
 
 orbs:
   aws-cli: circleci/aws-cli@3.1
@@ -29,7 +32,7 @@ jobs:
           command: aws s3 cp ./build/lambda.zip 's3://immortal-soup-59/lambda-$CLAMAV_LATEST.zip'
 
   check-latest-version:
-    executor: pre-commit-test
+    executor: version-check
     steps:
       - checkout
       - run: |
