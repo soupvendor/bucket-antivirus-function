@@ -19,8 +19,9 @@ def version_compare(versions: str):
         return f"Trouble getting current version, building version: {latest}"
     for i in range(len(v1_arr)):
         if v1_arr[i] < v2_arr[i]:
-            print(f"Newer version available: {latest}")
-            return "true"
+            return "True"
         else:
-            print(f"Already on current version: {current}")
-            return "false"
+            return "False"
+
+
+version_compare(example)
