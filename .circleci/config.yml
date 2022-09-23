@@ -32,7 +32,7 @@ jobs:
       - run: mkdir -p workspace
       - run: |
           yum update -y
-          yum install tar
+          yum install tar -y
           yum makecache fast && CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1) >> workspace/shared-env
       - persist_to_workspace:
           root: workspace
