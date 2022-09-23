@@ -36,9 +36,9 @@ jobs:
           name: Add env vars to workspace
           command: cat workspace/new-env-vars >> $BASH_ENV
       - persist_to_workspace:
-          root: workspace
+          root: /tmp/ci-test/workspace
           paths:
-            - new-env-vars
+            - ./*
   build:
     <<: *defaults
     executor: build
