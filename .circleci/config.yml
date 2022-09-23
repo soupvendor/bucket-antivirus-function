@@ -30,7 +30,8 @@ jobs:
       - run: |
           yum update -y
           yum install tar -y && yum install gzip -y
-          yum makecache fast && CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1) >> workspace/shared-env
+          yum makecache fast
+          echo CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1) >> workspace/shared-env
       - persist_to_workspace:
           root: workspace
           paths:
@@ -43,7 +44,6 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp/cci-test/workspace
-      - run: pwd
       - run: cat workspace/shared-env >> "$BASH_ENV"
 
       - checkout
