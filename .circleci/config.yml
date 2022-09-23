@@ -31,9 +31,9 @@ jobs:
           yum install tar -y && yum install gzip -y
           yum makecache fast
           echo CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1)
-      - run:
-          name: Add env vars to workspace
-          command: cat workspace/shared-env >> $BASH_ENV
+      # - run:
+      #     name: Add env vars to workspace
+      #     command: cat workspace/shared-env >> $BASH_ENV
       - persist_to_workspace:
           root: workspace
           paths:
