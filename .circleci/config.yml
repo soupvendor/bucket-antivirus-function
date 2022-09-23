@@ -30,7 +30,7 @@ jobs:
           yum update -y
           yum install tar -y && yum install gzip -y
           yum makecache fast
-          echo CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1) > workspace/shared-env
+          echo CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1)
       - run:
           name: Add env vars to workspace
           command: cat workspace/shared-env >> $BASH_ENV
@@ -44,12 +44,13 @@ jobs:
     environment:
       AWS_DEFAULT_REGION: us-east-1
     steps:
-      - checkout
       - attach_workspace:
           at: /tmp/ci-test/workspace
-      - run: ls
+      - run: ls -lah
+      - run: ls -lah workspace
       - run: cat workspace/shared-env >> $BASH_ENV
 
+      - checkout
       - aws-cli/setup:
           role-arn: $CIRCLECI_ROLE_ARN
       - run:
