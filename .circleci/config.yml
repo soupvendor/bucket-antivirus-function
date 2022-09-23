@@ -26,6 +26,7 @@ jobs:
     executor: version-check
     steps:
       - run: mkdir -p workspace
+      - run: pwd
       - run: |
           yum update -y
           yum install tar -y && yum install gzip -y
@@ -42,6 +43,7 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp/cci-test/workspace
+      - run: pwd
       - run: cat workspace/shared-env >> "$BASH_ENV"
 
       - checkout
