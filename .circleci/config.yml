@@ -25,6 +25,7 @@ jobs:
     <<: *defaults
     executor: version-check
     steps:
+      - checkout
       - run: mkdir -p workspace
       - run: |
           yum update -y
