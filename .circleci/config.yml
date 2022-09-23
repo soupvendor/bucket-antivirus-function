@@ -25,21 +25,20 @@ jobs:
     <<: *defaults
     executor: version-check
     steps:
-      - checkout
       - run: mkdir -p workspace
       - run: |
           yum update -y
           yum install tar -y && yum install gzip -y
           yum makecache fast
-          echo CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]') > workspace/new-env-vars
+          echo CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]') >> workspace/new-env-vars
           cat workspace/new-env-vars
       - run:
           name: Add env vars to workspace
           command: cat workspace/new-env-vars >> $BASH_ENV
       - persist_to_workspace:
-          root: /tmp/ci-test/workspace
+          root: workspace
           paths:
-            - ./*
+            - new-env-vars
   build:
     <<: *defaults
     executor: build
