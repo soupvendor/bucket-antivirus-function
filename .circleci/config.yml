@@ -30,14 +30,14 @@ jobs:
           yum update -y
           yum install tar -y && yum install gzip -y
           yum makecache fast
-          echo CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1) > workspace/shared-env
+          echo CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]') > workspace/new-env-vars
       # - run:
       #     name: Add env vars to workspace
       #     command: cat workspace/shared-env >> $BASH_ENV
       - persist_to_workspace:
           root: workspace
           paths:
-            - shared-env
+            - new-env-vars
   build:
     <<: *defaults
     executor: build
@@ -48,7 +48,7 @@ jobs:
           at: /tmp/ci-test/workspace
       - run: ls -lah
       - run: ls -lah workspace
-      - run: cat workspace/shared-env >> $BASH_ENV
+      - run: cat workspace/new-env-vars >> $BASH_ENV
 
       - checkout
       - aws-cli/setup:
