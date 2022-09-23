@@ -36,7 +36,6 @@ jobs:
     steps:
       - checkout
       - run: |
-          sudo apt update -y && sudo apt install -y yum
           yum makecache fast && CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1) >> "$BASH_ENV"
           echo $CLAMAV_LATEST
   pre-commit-deps:
