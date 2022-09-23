@@ -42,7 +42,7 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp/cci-test/workspace
-      - run: cat /tmp/cci-test/workspace/shared-env >> "$BASH_ENV"
+      - run: cat workspace/shared-env >> "$BASH_ENV"
 
       - checkout
       - aws-cli/setup:
