@@ -43,7 +43,8 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp/workspace
-      - run: cat /tmp/workspace/shared-env >> "$BASH_ENV"
+      - run: ls
+      - run: cat workspace/shared-env >> "$BASH_ENV"
 
       - checkout
       - aws-cli/setup:
