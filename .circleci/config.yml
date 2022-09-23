@@ -36,7 +36,6 @@ jobs:
           paths:
             - shared-env
   build:
-    <<: *defaults
     executor: build
     environment:
       AWS_DEFAULT_REGION: us-east-1
