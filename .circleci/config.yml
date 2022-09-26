@@ -13,7 +13,7 @@ executors:
 
   version-check:
     docker:
-      - image: cimg/base:2022.08-18.04
+      - image: amazonlinux:2
 
 # Setup for assume role with open ID and running CLI commands
 orbs:
@@ -27,10 +27,12 @@ jobs:
     steps:
       - run: mkdir -p workspace
       - run: |
-          sudo yum update -y
-          sudo yum makecache fast
+          yum update -y
+          yum install tar -y && yum install gzip -y
+          yum makecache fast
           echo CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]') >> workspace/new-env-vars
           cat workspace/new-env-vars
+          ls -lah workspace
       - run:
           name: Add env vars to workspace
           command: cat workspace/new-env-vars >> $BASH_ENV
