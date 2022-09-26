@@ -30,13 +30,13 @@ jobs:
           yum update -y
           yum install tar -y && yum install gzip -y
           yum makecache fast
-          echo CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]') >> workspace/new-env-vars
+          echo CLAMAV_LATEST=0.103.6 >> workspace/new-env-vars
           cat workspace/new-env-vars
       - run:
           name: Add env vars to workspace
           command: cat workspace/new-env-vars >> $BASH_ENV
       - persist_to_workspace:
-          root: workspace
+          root: /tmp/ci-test/workspace
           paths:
             - new-env-vars
   build:
@@ -48,7 +48,7 @@ jobs:
       - attach_workspace:
           at: /tmp/ci-test/workspace
       - run: ls -lah
-      - run: ls -lah workspace
+      - run: ls -lah workspace/
       - run: cat workspace/new-env-vars >> $BASH_ENV
 
       - checkout
