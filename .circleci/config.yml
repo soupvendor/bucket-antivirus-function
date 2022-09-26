@@ -32,7 +32,11 @@ jobs:
           yum makecache fast
           echo CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]') >> workspace/new-env-vars
           cat workspace/new-env-vars
+          echo "current directory"
+          ls -lah
+          echo "workspace directory"
           ls -lah workspace
+
       - run:
           name: Add env vars to workspace
           command: cat workspace/new-env-vars >> $BASH_ENV
