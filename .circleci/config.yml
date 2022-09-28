@@ -30,30 +30,35 @@ jobs:
           yum update -y
           yum install tar -y && yum install gzip -y
           yum makecache fast
-          echo CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]') >> workspace/new-env-vars
+          echo CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]') >> workspace/clamav-latest
 
       - persist_to_workspace:
-          root: /tmp/ci-test/workspace
+          root: workspace
           paths:
-            - new-env-vars
+            - clamav-latest
   build:
     <<: *defaults
     executor: build
     environment:
       AWS_DEFAULT_REGION: us-east-1
+
     steps:
       - checkout
       - attach_workspace:
           at: /tmp/ci-test/workspace
-      - run: cat workspace/new-env-vars >> $BASH_ENV
+      - run: cat workspace/clamav-latest >> $BASH_ENV
       - aws-cli/setup:
           role-arn: $CIRCLECI_ROLE_ARN
       - run:
           name: "make zip"
           command: make all
-      - run:
-          name: copy zip file
-          command: aws s3 cp ./build/lambda.zip s3://immortal-soup-59/lambda-${CLAMAV_LATEST}.zip
+      - aws-s3/sync:
+          from: ./build/lambda.zip
+          to: s3://$S3_BUCKET/lambda-$CLAMAV_LATEST.zip
+          overwrite: false
+      # - run:
+      #     name: copy zip file
+      #     command: aws s3 cp ./build/lambda.zip s3://$S3_BUCKET/lambda-$CLAMAV_LATEST.zip
 
   pre-commit-deps:
     executor: build
