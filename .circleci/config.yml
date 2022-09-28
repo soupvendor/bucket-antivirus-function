@@ -6,11 +6,14 @@ orbs:
   continuation: circleci/continuation@0.1.2
   aws-cli: circleci/aws-cli@3.1
 
+executors:
+  version-check:
+    docker:
+      - image: amazonlinux:2
+
 jobs:
   evaluate:
-    executor:
-      docker:
-        - image: amazonlinux:2
+    executor: version-check
     steps:
       - run: mkdir -p workspace
       - run: |
