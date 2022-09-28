@@ -55,8 +55,8 @@ jobs:
       - run:
           name: "make zip"
           command: make all
-      - aws-s3/sync:
-          from: ./build/
+      - aws-s3/copy:
+          from: ./build/lambda.zip
           to: "s3://$S3_BUCKET/lambda-$CLAMAV_LATEST.zip"
           overwrite: true
 
