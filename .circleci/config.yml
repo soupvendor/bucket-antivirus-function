@@ -37,11 +37,13 @@ jobs:
           root: workspace
           paths:
             - clamav-latest
+
+
   build:
     <<: *defaults
     executor: build
     environment:
-      AWS_DEFAULT_REGION: us-east-1
+      AWS_REGION: us-east-1
 
     steps:
       - checkout
