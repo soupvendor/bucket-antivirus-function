@@ -7,6 +7,7 @@ defaults: &defaults
 parameters:
   clamav-version:
     type: string
+    default: "failed"
 
 
 # Build executor is used for making the arm64 clamav zip, version-check is to compare latest version before make zip
