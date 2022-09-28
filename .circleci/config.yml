@@ -54,5 +54,5 @@ workflows:
     jobs:
       - evaluate
       - setup:
-        requires:
-          - evaluate
+          requires:
+            - evaluate
