@@ -55,18 +55,18 @@ jobs:
       #     name: copy zip file
       #     command: aws s3 cp ./build/lambda.zip s3://$S3_BUCKET/lambda-$CLAMAV_LATEST.zip
 
-    deploy:
-      <<: *defaults
-      environment:
-        AWS_REGION: us-east-1
-      executor: build
-      parameters:
-        latest-version:
-          type: string
-          default: $CLAMAV_LATEST
-      steps:
-        - checkout
-        - run: echo << parameters.latest-version >>
+  deploy:
+    <<: *defaults
+    environment:
+      AWS_REGION: us-east-1
+    executor: build
+    parameters:
+      latest-version:
+        type: string
+        default: $CLAMAV_LATEST
+    steps:
+      - checkout
+      - run: echo << parameters.latest-version >>
 
 
   pre-commit-deps:
