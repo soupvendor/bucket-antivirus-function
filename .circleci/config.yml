@@ -100,3 +100,8 @@ workflows:
           requires:
             - pre-commit-test
             - check-latest-version
+      - deploy:
+          context:
+            - aws
+          requires:
+            - build
