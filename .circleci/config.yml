@@ -33,7 +33,7 @@ jobs:
       - checkout
       - attach_workspace:
           at: /tmp/ci-test/workspace
-      - run: cat workspace/clamav-latest >> $BASH_ENV
+      - run: cat /tmp/ci-test/workspace/clamav-latest >> $BASH_ENV
       - run:
           name: use job config
           command: |
