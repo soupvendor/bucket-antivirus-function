@@ -1,0 +1,7 @@
+#!/bin/bash
+# set -o pipefail
+
+# mkdir configs/
+# cat << EOF > configs/generated_config.yml
+
+version: 2.1
