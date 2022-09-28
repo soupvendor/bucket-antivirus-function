@@ -11,11 +11,11 @@ jobs:
     steps:
       - checkout
       - run:
-          name: generate config
+          name: use job config
           command: |
-            ./scripts/new-config
+            echo "using job config"
       - continuation/continue:
-          configuration_path: ./scripts/new-config/configs/generated_config.yml
+          configuration_path: ./scripts/new-config.yml
 
 workflows:
   setup:
