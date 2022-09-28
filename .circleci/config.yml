@@ -38,6 +38,7 @@ jobs:
       - checkout
       - attach_workspace:
           at: /tmp/ci-test/workspace
+      - run: ls -lah && pwd
       - run: cat workspace/clamav-latest >> $BASH_ENV
       - run:
           name: use job config
