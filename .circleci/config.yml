@@ -2,6 +2,9 @@ version: 2.1
 
 setup: true
 
+defaults: &defaults
+  working_directory: /tmp/ci-test
+
 orbs:
   continuation: circleci/continuation@0.1.2
   aws-cli: circleci/aws-cli@3.1
@@ -13,6 +16,7 @@ executors:
 
 jobs:
   evaluate:
+    <<: *defaults
     executor: version-check
     steps:
       - run: mkdir -p workspace
@@ -28,12 +32,13 @@ jobs:
             - clamav-latest
 
   setup:
+    <<: *defaults
     executor: continuation/default
     steps:
       - checkout
       - attach_workspace:
           at: /tmp/ci-test/workspace
-      - run: cat /tmp/ci-test/workspace/clamav-latest >> $BASH_ENV
+      - run: cat workspace/clamav-latest >> $BASH_ENV
       - run:
           name: use job config
           command: |
