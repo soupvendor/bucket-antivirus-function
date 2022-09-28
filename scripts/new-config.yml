@@ -85,7 +85,7 @@ workflows:
   version: 2
   make-sync-zip:
     jobs:
-      - check-latest-version
+      # - check-latest-version
       - pre-commit-deps
       - pre-commit-test:
           requires:
@@ -95,4 +95,4 @@ workflows:
             - aws
           requires:
             - pre-commit-test
-            - check-latest-version
+            # - check-latest-version
