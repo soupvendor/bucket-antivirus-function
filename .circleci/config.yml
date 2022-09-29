@@ -8,6 +8,7 @@ defaults: &defaults
 orbs:
   continuation: circleci/continuation@0.1.2
   aws-cli: circleci/aws-cli@3.1
+  path-filtering: circleci/path-filtering@0.1.3
 
 executors:
   version-check:
@@ -25,11 +26,6 @@ jobs:
           yum install tar -y && yum install gzip -y
           yum makecache fast
           echo CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]') >> workspace/clamav-latest
-
-      - run:
-          name: creating json object
-          command: |
-           echo {\"clamav-version\": \"${CLAMAV_LATEST}\"\} >> workspace/output.json
       - persist_to_workspace:
           root: workspace
           paths:
@@ -51,12 +47,18 @@ jobs:
       - continuation/continue:
           configuration_path: ./scripts/new-config.yml
           parameters: /tmp/ci-test/workspace/output.json
+  path-filtering:
+    name: pass clamav version
+    mapping: |
+      service1/.* clamav-version $CLAMAV_LATEST
+    config-path: ./scripts/new-config.yml
 
 workflows:
   version: 2
   load-env-setup:
     jobs:
       - evaluate
+      - path-filtering
       - setup:
           requires:
             - evaluate
