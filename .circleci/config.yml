@@ -46,7 +46,7 @@ jobs:
             echo "using job config"
       - continuation/continue:
           configuration_path: ./scripts/new-config.yml
-          parameters: {"clamav-version": "$CLAMAV_LATEST"}
+          parameters: '{"clamav-version": "$CLAMAV_LATEST"}'
 
 workflows:
   version: 2
