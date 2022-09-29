@@ -47,18 +47,18 @@ jobs:
       - continuation/continue:
           configuration_path: ./scripts/new-config.yml
           parameters: /tmp/ci-test/workspace/output.json
-  path-filtering:
-    name: pass clamav version
-    mapping: |
-      service1/.* clamav-version $CLAMAV_LATEST
-    config-path: ./scripts/new-config.yml
+
 
 workflows:
   version: 2
   load-env-setup:
     jobs:
       - evaluate
-      - path-filtering
+      - path-filtering/filter:
+          name: pass clamav version
+          mapping: |
+            scripts/.* clamav-version $CLAMAV_LATEST
+          config-path: ./scripts/new-config.yml
       - setup:
           requires:
             - evaluate
