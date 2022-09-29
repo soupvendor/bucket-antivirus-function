@@ -56,7 +56,7 @@ jobs:
       #     command: aws s3 cp ./build/lambda.zip s3://$S3_BUCKET/lambda-$CLAMAV_LATEST.zip
       - run:
           name: run test script
-          command: ./scripts/test-exist.py
+          command: sudo ./scripts/test-exist.py
 
   pre-commit-deps:
     executor: build
