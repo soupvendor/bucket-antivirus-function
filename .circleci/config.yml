@@ -26,6 +26,10 @@ jobs:
           yum makecache fast
           echo CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]') >> workspace/clamav-latest
 
+      - run:
+          name: creating json object
+          command: |
+           echo {\"clamav-version\": ${CLAMAV_LATEST}\} >> workspace/output.json
       - persist_to_workspace:
           root: workspace
           paths:
@@ -46,7 +50,7 @@ jobs:
             echo "using job config"
       - continuation/continue:
           configuration_path: ./scripts/new-config.yml
-          parameters: '{"clamav-version": "$CLAMAV_LATEST"}'
+          parameters: ./workspace/output.json
 
 workflows:
   version: 2
