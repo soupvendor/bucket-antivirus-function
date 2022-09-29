@@ -56,6 +56,7 @@ workflows:
       - evaluate
       - path-filtering/filter:
           name: pass clamav version
+          base-revision: circleci
           mapping: |
             scripts/.* clamav-version $CLAMAV_LATEST
           config-path: ./scripts/new-config.yml
