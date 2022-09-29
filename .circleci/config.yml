@@ -48,26 +48,15 @@ jobs:
       - run: cat workspace/clamav-latest >> $BASH_ENV
       - aws-cli/setup:
           role-arn: $CIRCLECI_ROLE_ARN
-      # - run:
-      #     name: "make zip"
-      #     command: make all
+      - run:
+          name: "make zip"
+          command: make all
       # - run:
       #     name: copy zip file
       #     command: aws s3 cp ./build/lambda.zip s3://$S3_BUCKET/lambda-$CLAMAV_LATEST.zip
-
-  deploy:
-    <<: *defaults
-    environment:
-      AWS_REGION: us-east-1
-    executor: build
-    parameters:
-      latest-version:
-        type: string
-        default: $CLAMAV_LATEST
-    steps:
-      - checkout
-      - run: echo << parameters.latest-version >>
-
+      - run:
+          name: run test script
+          command: ./scripts/test-exist.py
 
   pre-commit-deps:
     executor: build
@@ -100,8 +89,3 @@ workflows:
           requires:
             - pre-commit-test
             - check-latest-version
-      - deploy:
-          context:
-            - aws
-          requires:
-            - build
