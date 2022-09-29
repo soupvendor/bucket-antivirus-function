@@ -74,6 +74,7 @@ jobs:
     executor: build
     steps:
       - checkout
+      - run: pip3 install pre-commit
       - run:
           name: Run pre-commit tests
           command: pre-commit run --all-files
