@@ -41,7 +41,7 @@ jobs:
       - run:
           name: use job config
           command: |
-            ./scripts/new-config ${CLAMAV_LATEST}
+            ./scripts/new-config "0.103.6"
       - continuation/continue:
           configuration_path: ./configs/generated_config.yml
 
