@@ -18,7 +18,11 @@ jobs:
   evaluate:
     <<: *defaults
     executor: version-check
+    environment:
+      AWS_DEFAULT_REGION: us-east-1
     steps:
+      - aws-cli/setup:
+          role-arn: $CIRCLECI_ROLE_ARN
       - run: mkdir -p workspace
       - run: |
           yum update -y
@@ -26,6 +30,7 @@ jobs:
           yum makecache fast
           export CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]')
           echo '{"clamav-version": "'$CLAMAV_LATEST'" }' >> workspace/clamav-latest.json
+      - run: |
           aws s3 ls s3://$S3_BUCKET/lambda-$CLAMAV_LATEST.zip
           if [[ $? != 0 ]]; then
             export REQUIRE_UPDATE=true
@@ -51,7 +56,7 @@ jobs:
             ./scripts/new-config
       - continuation/continue:
           configuration_path: ./configs/generated_config.yml
-          parameters: /tmp/ci-test/workspace/clamav-latest.json
+          parameters: /tmp/ci-test/workspace/require-update.json
 
 workflows:
   version: 2
