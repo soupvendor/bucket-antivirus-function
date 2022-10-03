@@ -26,10 +26,17 @@ jobs:
           yum makecache fast
           export CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]')
           echo '{"clamav-version": "'$CLAMAV_LATEST'" }' >> workspace/clamav-latest.json
+          aws s3 ls s3://$S3_BUCKET/lambda-$CLAMAV_LATEST.zip
+          if [[ $? != 0 ]]; then
+            export REQUIRE_UPDATE=true
+            exit 1
+          fi
+          echo '{"require-update": "'$REQUIRE_UPDATE'"}' >> workspace/require-update.json
       - persist_to_workspace:
           root: workspace
           paths:
             - clamav-latest.json
+            - require-update.json
 
   setup:
     <<: *defaults
