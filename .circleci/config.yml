@@ -8,7 +8,6 @@ defaults: &defaults
 orbs:
   continuation: circleci/continuation@0.1.2
   aws-cli: circleci/aws-cli@3.1
-  path-filtering: circleci/path-filtering@0.1.3
 
 executors:
   version-check:
@@ -47,18 +46,11 @@ jobs:
           configuration_path: ./scripts/configs/generated_config.yml
           parameters: '{}'
 
-
 workflows:
   version: 2
   load-env-setup:
     jobs:
       - evaluate
-      - path-filtering/filter:
-          name: pass clamav version
-          base-revision: circleci
-          mapping: |
-            scripts/.* clamav-version $CLAMAV_LATEST
-          config-path: ./scripts/new-config.yml
       - setup:
           requires:
             - evaluate
