@@ -47,7 +47,7 @@ jobs:
       - run: cat workspace/clamav-latest >> $BASH_ENV
       - aws-cli/setup:
           role-arn: $CIRCLECI_ROLE_ARN
-          aws-region: us-east-1
+          aws-region: $DEFAULT_REGION
       - run:
           name: "make zip"
           command: make all
