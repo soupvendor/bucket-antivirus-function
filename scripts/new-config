@@ -1,13 +1,18 @@
+#!/bin/bash
+set -o pipefail
+
+CLAMAV_LATEST=$1
+
+mkdir configs/
+cat << EOF > configs/generated_config.yml
 version: 2.1
 
 # Shared workspace for passing env variables between jobs
-defaults: &defaults
-  working_directory: /tmp/ci-test
 
 parameters:
   clamav-version:
-    type: string
-    default: "failed"
+    type: env_var_name
+    default: CLAMAV_LATEST
 
 
 # Build executor is used for making the arm64 clamav zip, version-check is to compare latest version before make zip
@@ -44,8 +49,8 @@ jobs:
   #           - clamav-latest
 
 
+
   build:
-    <<: *defaults
     executor: build
     environment:
       AWS_REGION: us-east-1
@@ -63,7 +68,7 @@ jobs:
       # - run:
       #     name: copy zip file
       #     command: aws s3 cp ./build/lambda.zip s3://$S3_BUCKET/lambda-$CLAMAV_LATEST.zip
-      - run: echo << pipeline.parameters.clamav-version >>
+        - run: echo << pipeline.parameters.clamav-version >>
 
 #   pre-commit-deps:
 #     executor: build
