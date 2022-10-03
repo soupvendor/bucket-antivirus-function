@@ -34,7 +34,7 @@ jobs:
           aws s3 ls s3://$S3_BUCKET/lambda-$CLAMAV_LATEST.zip
           if [[ $? != 0 ]]; then
             export REQUIRE_UPDATE=true
-            exit 1
+            exit 0
           fi
           echo '{"require-update": "'$REQUIRE_UPDATE'"}' >> workspace/require-update.json
       - persist_to_workspace:
