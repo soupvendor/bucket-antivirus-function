@@ -43,8 +43,7 @@ jobs:
           command: |
             ./scripts/new-config ${CLAMAV_LATEST}
       - continuation/continue:
-          configuration_path: ./scripts/configs/generated_config.yml
-          parameters: '{}'
+          configuration_path: ./configs/generated_config.yml
 
 workflows:
   version: 2
