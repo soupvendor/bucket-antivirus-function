@@ -24,13 +24,12 @@ jobs:
           yum update -y
           yum install tar -y && yum install gzip -y
           yum makecache fast
-          export CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]') >> workspace/clamav-latest
-          echo '{"clamav-version": "'$CLAMAV_LATEST'" }' >> workspace/test.json
+          export CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]')
+          echo '{"clamav-version": "'$CLAMAV_LATEST'" }' >> workspace/clamav-latest.json
       - persist_to_workspace:
           root: workspace
           paths:
-            - clamav-latest
-            - test.json
+            - clamav-latest.json
 
   setup:
     <<: *defaults
@@ -39,14 +38,13 @@ jobs:
       - checkout
       - attach_workspace:
           at: /tmp/ci-test/workspace
-      - run: cat workspace/clamav-latest >> $BASH_ENV
       - run:
           name: use job config
           command: |
             ./scripts/new-config
       - continuation/continue:
           configuration_path: ./configs/generated_config.yml
-          parameters: /tmp/ci-test/workspace/test.json
+          parameters: /tmp/ci-test/workspace/clamav-latest.json
 
 workflows:
   version: 2
