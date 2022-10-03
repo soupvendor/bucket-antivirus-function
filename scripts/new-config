@@ -1,7 +1,5 @@
 #!/bin/bash
 set -o pipefail
-CLAMAV_LATEST=$1
-echo $1
 mkdir configs/
 cat << EOF > configs/generated_config.yml
 
@@ -11,7 +9,7 @@ version: 2.1
 
 parameters:
   clamav-version:
-    type: env_var_name
+    type: string
     default: CLAMAV_LATEST
 
 
