@@ -10,7 +10,7 @@ version: 2.1
 parameters:
   clamav-version:
     type: string
-    default: CLAMAV_LATEST
+    default: NOPE
 
 
 # Build executor is used for making the arm64 clamav zip, version-check is to compare latest version before make zip
@@ -52,10 +52,6 @@ jobs:
     executor: build
     environment:
       AWS_REGION: us-east-1
-    parameters:
-      clamav-version:
-        type: string
-        default: CLAMAV_LATEST
 
     steps:
       - checkout
@@ -70,7 +66,7 @@ jobs:
       # - run:
       #     name: copy zip file
       #     command: aws s3 cp ./build/lambda.zip s3://$S3_BUCKET/lambda-$CLAMAV_LATEST.zip
-      - run: echo << parameters.clamav-version >>
+      - run: echo << pipeline.parameters.clamav-version >>
 
 #   pre-commit-deps:
 #     executor: build
