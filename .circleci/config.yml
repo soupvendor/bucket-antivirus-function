@@ -26,7 +26,7 @@ jobs:
       - run: mkdir -p workspace
       - run: |
           yum update -y
-          yum install tar -y && yum install gzip -y
+          yum install tar -y && yum install gzip -y && yum install unzip -y
           yum makecache fast
           export CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]')
           echo '{"clamav-version": "'$CLAMAV_LATEST'" }' >> workspace/clamav-latest.json
