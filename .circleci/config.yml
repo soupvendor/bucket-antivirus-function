@@ -21,8 +21,6 @@ jobs:
     environment:
       AWS_DEFAULT_REGION: us-east-1
     steps:
-      - aws-cli/setup:
-          role-arn: $CIRCLECI_ROLE_ARN
       - run: mkdir -p workspace
       - run: |
           yum update -y
@@ -30,6 +28,8 @@ jobs:
           yum makecache fast
           export CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]')
           echo '{"clamav-version": "'$CLAMAV_LATEST'" }' >> workspace/clamav-latest.json
+      - aws-cli/setup:
+          role-arn: $CIRCLECI_ROLE_ARN
       - run: |
           aws s3 ls s3://$S3_BUCKET/lambda-$CLAMAV_LATEST.zip
           if [[ $? != 0 ]]; then
