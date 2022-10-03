@@ -32,10 +32,7 @@ jobs:
           role-arn: $CIRCLECI_ROLE_ARN
       - run: |
           aws s3 ls s3://$S3_BUCKET/lambda-$CLAMAV_LATEST.zip
-          if [[ $? != 0 ]]; then
-            export REQUIRE_UPDATE=true
-            exit 0
-          fi
+          if [[ $? == 0 ]]; then export REQUIRE_UPDATE=true; fi
           echo '{"require-update": "'$REQUIRE_UPDATE'"}' >> workspace/require-update.json
       - persist_to_workspace:
           root: workspace
