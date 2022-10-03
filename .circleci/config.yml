@@ -62,7 +62,9 @@ workflows:
   version: 2
   load-env-setup:
     jobs:
-      - evaluate
+      - evaluate:
+          context:
+            - aws
       - setup:
           requires:
             - evaluate
