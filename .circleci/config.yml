@@ -44,7 +44,7 @@ jobs:
             ./scripts/new-config "0.103.6"
       - continuation/continue:
           configuration_path: ./configs/generated_config.yml
-          parameters: /home/test.json
+          parameters: /tmp/test.json
 
 workflows:
   version: 2
@@ -55,6 +55,6 @@ workflows:
           pre-steps:
             - run:
                 command: |
-                  echo '{"clamav-version": "'$CLAMAV_LATEST'" }' >> /home/test.json
+                  echo '{"clamav-version": "'$CLAMAV_LATEST'" }' >> /tmp/test.json
           requires:
             - evaluate
