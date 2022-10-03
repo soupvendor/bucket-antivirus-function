@@ -10,6 +10,7 @@ executors:
     resource_class: arm.medium
     machine:
       image: ubuntu-2004:current
+      docker_layer_caching: true
 
   version-check:
     docker:
@@ -47,13 +48,11 @@ jobs:
       - run: cat workspace/clamav-latest >> $BASH_ENV
       - aws-cli/setup:
           role-arn: $CIRCLECI_ROLE_ARN
-          aws-region:
-            default: us-east-1
-            type: env_var_name
       - run:
           name: "make zip"
           command: make all
       - run: echo $CLAMAV_LATEST $S3_BUCKET
+      - run: pwd
       - run:
           name: copy zip file
           command: aws s3 cp ./build/lambda.zip s3://$S3_BUCKET/lambda-$CLAMAV_LATEST.zip
