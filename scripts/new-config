@@ -86,7 +86,7 @@ jobs:
 #           name: Run pre-commit tests
 #           command: pre-commit run --all-files
 
-# workflows:
+workflows:
   version: 2
   make-sync-zip:
     jobs:
