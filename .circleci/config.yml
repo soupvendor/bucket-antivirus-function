@@ -51,11 +51,9 @@ jobs:
       - run:
           name: "make zip"
           command: make all
-      - run: echo $CLAMAV_LATEST $S3_BUCKET
-      - run: ls -lah
       - run:
           name: copy zip file
-          command: aws s3 cp ./build/lambda.zip s3://$S3_BUCKET/lambda-$CLAMAV_LATEST.zip
+          command: aws s3 cp ./build/lambda.zip s3://immortal-soup-59/lambda-$CLAMAV_LATEST.zip
       - run:
           name: "verify version"
           command: |
