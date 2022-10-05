@@ -40,16 +40,16 @@ jobs:
           role-arn: $CIRCLECI_ROLE_ARN
       - run: echo << pipeline.parameters.require-update >>
       - run : echo $CLAMAV_LATEST
-      # - when:
-      #     condition:
-      #       - equal: [ true, << pipeline.parameters.require-update >> ]
-      #     steps:
-      #       - run:
-      #           name: "make zip"
-      #           command: make all
-      #       - run:
-      #           name: copy zip file
-      #           command: aws s3 cp ./build/lambda.zip s3://$S3_BUCKET/lambda-$CLAMAV_LATEST.zip
+      - when:
+          condition:
+            - equal: [ true, << pipeline.parameters.require-update >> ]
+          steps:
+            - run:
+                name: "make zip"
+                command: make all
+            - run:
+                name: copy zip file
+                command: aws s3 cp ./build/lambda.zip s3://$S3_BUCKET/lambda-$CLAMAV_LATEST.zip
 
 #   pre-commit-deps:
 #     executor: build
