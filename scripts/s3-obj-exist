@@ -1,9 +1,13 @@
 #!/bin/bash
 
 
-aws s3 ls s3://immortal-soup-59/$1 > /dev/null
-if [[ $? == 0 ]]; then
-    export REQUIRE_UPDATE=false;
-else
-    export REQUIRE_UPDATE=true;
-fi
+export CLAMAV_LATEST=0.103.6
+echo $CLAMAV_LATEST
+
+
+# aws s3 ls s3://immortal-soup-59/$1 > /dev/null
+# if [[ $? == 0 ]]; then
+#     export REQUIRE_UPDATE=false;
+# else
+#     export REQUIRE_UPDATE=true;
+# fi
