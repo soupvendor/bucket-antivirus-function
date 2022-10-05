@@ -31,7 +31,7 @@ jobs:
           role-arn: $CIRCLECI_ROLE_ARN
 
       - run: |
-          export CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]')
+          echo CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]') >> "$BASH_ENV"
           echo $CLAMAV_LATEST >> workspace/clamav-latest
           echo '{"require-update": '$REQUIRE_UPDATE'}' >> workspace/require-update.json
           echo $REQUIRE_UPDATE $CLAMAV_LATEST
