@@ -1,13 +1,7 @@
 #!/bin/bash
 
-
-export CLAMAV_LATEST=0.103.6
-echo $CLAMAV_LATEST
-
-
-# aws s3 ls s3://immortal-soup-59/$1 > /dev/null
-# if [[ $? == 0 ]]; then
-#     export REQUIRE_UPDATE=false;
-# else
-#     export REQUIRE_UPDATE=true;
-# fi
+export CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]')
+echo CLAMAV_LATEST=$CLAMAV_LATEST >> workspace/clamav-latest
+export REQUIRE_UPDATE=$(aws s3 ls s3://immortal-soup-59/lambda-$CLAMAV_LATEST.zip > /dev/null; if [[ $? == 0 ]]; then echo false; else echo true; fi)
+echo '{"require-update": '$REQUIRE_UPDATE'}' >> workspace/require-update.json
+echo $REQUIRE_UPDATE $CLAMAV_LATEST
