@@ -27,7 +27,8 @@ jobs:
           yum update -y
           yum install tar -y && yum install gzip -y && yum install unzip -y
           yum makecache fast
-          echo CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]') >> workspace/clamav-latest
+          export CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]')
+          echo $CLAMAV_LATEST >> workspace/clamav-latest
       - aws-cli/setup:
           role-arn: $CIRCLECI_ROLE_ARN
       - run: aws s3 ls s3://immortal-soup-59/lambda-$CLAMAV_LATEST.zip
