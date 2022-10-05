@@ -1,10 +1,9 @@
 #!/bin/bash
 
-export REQUIRE_UPDATE=\
-$(aws s3 ls s3://immortal-soup-59/$1 > /dev/null;
+
+aws s3 ls s3://immortal-soup-59/$1 > /dev/null
 if [[ $? == 0 ]]; then
-    echo true;
+    export REQUIRE_UPDATE=false;
 else
-    echo false;
+    export REQUIRE_UPDATE=true;
 fi
-)

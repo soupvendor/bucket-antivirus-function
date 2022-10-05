@@ -34,9 +34,9 @@ jobs:
           echo CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]') >> workspace/clamav-latest
           export CLAMAV_LATEST=$(cat workspace/clamav-latest)
           echo $CLAMAV_LATEST
-          export REQUIRE_UPDATE=$(aws s3 ls s3://immortal-soup-59/lambda-$CLAMAV_LATEST.zip > /dev/null; if [[ $? == 0 ]]; then echo false; else echo true; fi)
+          aws s3 ls s3://immortal-soup-59/lambda-$CLAMAV_LATEST.zip; if [[ $? == 0 ]]; then echo false; else echo true; fi
           echo '{"require-update": '$REQUIRE_UPDATE'}' >> workspace/require-update.json
-          echo $REQUIRE_UPDATE
+          echo $REQUIRE_UPDATE $CLAMAV_LATEST
       - persist_to_workspace:
           root: workspace
           paths:
