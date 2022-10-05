@@ -28,7 +28,7 @@ jobs:
           yum install tar -y && yum install gzip -y && yum install unzip -y
           yum makecache fast
           export CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]')
-          echo '{"clamav-version": "'$CLAMAV_LATEST'" }' >> workspace/clamav-latest.json
+          echo '{"clamav-version": "'$CLAMAV_LATEST'"},' >> workspace/require-update.json
       - aws-cli/setup:
           role-arn: $CIRCLECI_ROLE_ARN
       - run: |
