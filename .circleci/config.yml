@@ -27,17 +27,16 @@ jobs:
           yum update -y
           yum install tar -y && yum install gzip -y && yum install unzip -y
           yum makecache fast
-          export CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]')
-          echo '{"clamav-version": "'$CLAMAV_LATEST'",' >> workspace/require-update.json
+          echo CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]') >> workspace/clamav-latest
       - aws-cli/setup:
           role-arn: $CIRCLECI_ROLE_ARN
       - run: |
           ./scripts/s3-obj-exist lambda-$CLAMAV_LATST.zip
-          echo '"require-update": "'$REQUIRE_UPDATE'"}' >> workspace/require-update.json
+          echo '{"require-update": "'$REQUIRE_UPDATE'"}' >> workspace/require-update.json
       - persist_to_workspace:
           root: workspace
           paths:
-            - clamav-latest.json
+            - clamav-latest
             - require-update.json
 
   setup:
@@ -47,10 +46,11 @@ jobs:
       - checkout
       - attach_workspace:
           at: /tmp/ci-test/workspace
+      - run: cat workspace/clamav-latest >> "$BASH_ENV"
       - run:
           name: use job config
           command: |
-            ./scripts/new-config
+            ./scripts/new-config $CLAMAV_LATEST
       - continuation/continue:
           configuration_path: ./configs/generated_config.yml
           parameters: /tmp/ci-test/workspace/require-update.json

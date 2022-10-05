@@ -1,5 +1,6 @@
 #!/bin/bash
 set -o pipefail
+CLAMAV_LATEST=$1
 mkdir configs/
 cat << EOF > configs/generated_config.yml
 version: 2.1
@@ -7,12 +8,6 @@ version: 2.1
 # Shared workspace for passing env variables between jobs
 
 parameters:
-  clamav-version:
-    description: Latest clamav version available for amazon linux epel
-    type: string
-    default: NOPE
-
-
   require-update:
     description: Decide wether or not the build will make the zip and push it
     type: boolean
@@ -52,7 +47,7 @@ jobs:
                 command: make all
             - run:
                 name: copy zip file
-                command: aws s3 cp ./build/lambda.zip s3://$S3_BUCKET/lambda-<< pipeline.parameters.clamav-version >>.zip
+                command: aws s3 cp ./build/lambda.zip s3://$S3_BUCKET/lambda-$CLAMAV_LATEST.zip
 
 #   pre-commit-deps:
 #     executor: build
