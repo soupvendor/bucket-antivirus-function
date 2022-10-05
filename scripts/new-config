@@ -39,10 +39,9 @@ jobs:
       - aws-cli/setup:
           role-arn: $CIRCLECI_ROLE_ARN
       - run: echo << pipeline.parameters.require-update >>
-      - run : echo $CLAMAV_LATEST
+      - run: echo $CLAMAV_LATEST
       - when:
-          condition:
-            - equal: [ true, << pipeline.parameters.require-update >> ]
+          condition: << pipeline.parameters.require-update >>
           steps:
             - run:
                 name: "make zip"
