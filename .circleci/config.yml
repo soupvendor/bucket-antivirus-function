@@ -31,7 +31,6 @@ jobs:
           echo $CLAMAV_LATEST >> workspace/clamav-latest
       - aws-cli/setup:
           role-arn: $CIRCLECI_ROLE_ARN
-      - run: aws s3 ls s3://immortal-soup-59/lambda-$CLAMAV_LATEST.zip
       - run: |
           export REQUIRE_UPDATE=$(aws s3 ls s3://immortal-soup-59/lambda-$CLAMAV_LATEST.zip > /dev/null; if [[ $? == 0 ]]; then echo true; else echo false; fi)
           echo '{"require-update": '$REQUIRE_UPDATE'}' >> workspace/require-update.json
