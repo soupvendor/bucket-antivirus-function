@@ -31,12 +31,11 @@ jobs:
           role-arn: $CIRCLECI_ROLE_ARN
 
       - run: |
-          echo CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]') >> workspace/clamav-latest
-          export CLAMAV_LATEST=$(cat workspace/clamav-latest)
-          echo $CLAMAV_LATEST
+          export CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]')
+          echo $CLAMAV_LATEST >> workspace/clamav-latest
           echo '{"require-update": '$REQUIRE_UPDATE'}' >> workspace/require-update.json
           echo $REQUIRE_UPDATE $CLAMAV_LATEST
-      - run: aws s3 ls s3://immortal-soup-59/lambda-0.103.6.zip
+      - run: aws s3 ls s3://immortal-soup-59/lambda-$CLAMAV_LATEST.zip
       - persist_to_workspace:
           root: workspace
           paths:
