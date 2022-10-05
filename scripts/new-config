@@ -4,7 +4,7 @@ CLAMAV_LATEST=$1
 mkdir configs/
 cat << EOF > configs/generated_config.yml
 version: 2.1
-
+# This gets triggered by the setup config
 parameters:
   require-update:
     description: Decide wether or not the build will make the zip and push it
@@ -27,26 +27,6 @@ orbs:
   aws-cli: circleci/aws-cli@3.1
 
 jobs:
-  build:
-    executor: build
-    environment:
-      AWS_DEFAULT_REGION: us-east-1
-    steps:
-      - checkout
-      - aws-cli/setup:
-          role-arn: $CIRCLECI_ROLE_ARN
-      - run: echo << pipeline.parameters.require-update >>
-      - run: echo $CLAMAV_LATEST
-      - when:
-          condition: << pipeline.parameters.require-update >>
-          steps:
-            - run:
-                name: "make zip"
-                command: make all
-            - run:
-                name: copy zip file
-                command: aws s3 cp ./build/lambda.zip s3://$S3_BUCKET/lambda-$CLAMAV_LATEST.zip
-
   pre-commit-deps:
     executor: build
     steps:
@@ -62,6 +42,24 @@ jobs:
       - run:
           name: Run pre-commit tests
           command: pre-commit run --all-files
+  # Conditional job that builds and copies lambda zip to s3 bucket
+  build:
+    executor: build
+    environment:
+      AWS_DEFAULT_REGION: us-east-1
+    steps:
+      - checkout
+      - aws-cli/setup:
+          role-arn: $CIRCLECI_ROLE_ARN
+      - when:
+          condition: << pipeline.parameters.require-update >>
+          steps:
+            - run:
+                name: "make zip"
+                command: make all
+            - run:
+                name: copy zip file
+                command: aws s3 cp ./build/lambda.zip s3://$S3_BUCKET/lambda-$CLAMAV_LATEST.zip
 
 workflows:
   version: 2

@@ -15,6 +15,7 @@ executors:
       - image: amazonlinux:2
 
 jobs:
+  # Define env var that determine the latest version and s3 object existence
   evaluate:
     <<: *defaults
     executor: version-check
@@ -32,6 +33,7 @@ jobs:
       - aws-cli/setup:
           role-arn: $CIRCLECI_ROLE_ARN
       - run:
+          # Script contains env var definitions and storing into workspace
           name: Checking latest clamav, checking if s3 obj exists
           command: |
             ./scripts/s3-obj-exist
@@ -40,7 +42,7 @@ jobs:
           paths:
             - clamav-latest
             - require-update.json
-
+  # Setup that dynamically sends loads latest version into generated config, and sends require-update parameter as JSON
   setup:
     <<: *defaults
     executor: continuation/default
