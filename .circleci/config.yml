@@ -27,14 +27,15 @@ jobs:
           yum update -y
           yum install tar -y && yum install gzip -y && yum install unzip -y
           yum makecache fast
-          export CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]')
-          echo $CLAMAV_LATEST >> workspace/clamav-latest
+          echo CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]') >> workspace/clamav-latest
+          export CLAMAV_LATEST=$(cat workspace/clamav-latest)
+          echo $CLAMAV_LATEST
       - aws-cli/setup:
           role-arn: $CIRCLECI_ROLE_ARN
       - run: |
           export REQUIRE_UPDATE=$(aws s3 ls s3://immortal-soup-59/lambda-$CLAMAV_LATEST.zip > /dev/null; if [[ $? == 0 ]]; then echo false; else echo true; fi)
           echo '{"require-update": '$REQUIRE_UPDATE'}' >> workspace/require-update.json
-          echo $REQUIRE_UPDATE $CLAMAV_LATEST
+          echo $REQUIRE_UPDATE
       - persist_to_workspace:
           root: workspace
           paths:
