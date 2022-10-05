@@ -23,14 +23,18 @@ jobs:
     steps:
       - checkout
       - run: mkdir -p workspace
-      - run: |
-          yum update -y
-          yum install tar -y && yum install gzip -y && yum install unzip -y
-          yum makecache fast
+      - run:
+          name: Installing dependencies
+          command: |
+            yum update -y
+            yum install tar -y && yum install gzip -y && yum install unzip -y
+            yum makecache fast
       - aws-cli/setup:
           role-arn: $CIRCLECI_ROLE_ARN
-      - run: |
-          ./scripts/s3-obj-exist
+      - run:
+          name: Checking latest clamav, checking if s3 obj exists
+          command: |
+            ./scripts/s3-obj-exist
       - persist_to_workspace:
           root: workspace
           paths:

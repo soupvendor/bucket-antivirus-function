@@ -5,16 +5,13 @@ mkdir configs/
 cat << EOF > configs/generated_config.yml
 version: 2.1
 
-# Shared workspace for passing env variables between jobs
-
 parameters:
   require-update:
     description: Decide wether or not the build will make the zip and push it
     type: boolean
     default: false
 
-
-# Build executor is used for making the arm64 clamav zip, version-check is to compare latest version before make zip
+# build executor is used for making the arm64 clamav zip, version-check is to compare latest version before make zip
 executors:
   build:
     resource_class: arm.medium
@@ -50,34 +47,34 @@ jobs:
                 name: copy zip file
                 command: aws s3 cp ./build/lambda.zip s3://$S3_BUCKET/lambda-$CLAMAV_LATEST.zip
 
-#   pre-commit-deps:
-#     executor: build
-#     steps:
-#       - checkout
-#       - run: pip3 install pre-commit
-#       - run: pre-commit install-hooks
+  pre-commit-deps:
+    executor: build
+    steps:
+      - checkout
+      - run: pip3 install pre-commit
+      - run: pre-commit install-hooks
 
-#   pre-commit-test:
-#     executor: build
-#     steps:
-#       - checkout
-#       - run: pip3 install pre-commit
-#       - run:
-#           name: Run pre-commit tests
-#           command: pre-commit run --all-files
+  pre-commit-test:
+    executor: build
+    steps:
+      - checkout
+      - run: pip3 install pre-commit
+      - run:
+          name: Run pre-commit tests
+          command: pre-commit run --all-files
 
 workflows:
   version: 2
   make-sync-zip:
     jobs:
-      # - check-latest-version
-      # - pre-commit-deps
-      # - pre-commit-test:
-      #     requires:
-      #       - pre-commit-deps
+      - check-latest-version
+      - pre-commit-deps
+      - pre-commit-test:
+          requires:
+            - pre-commit-deps
       - build:
           context:
             - aws
-          # requires:
-          #   - pre-commit-test
-            # - check-latest-version
+          requires:
+            - pre-commit-test
+            - check-latest-version
