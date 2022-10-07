@@ -36,7 +36,7 @@ jobs:
           # Script contains env var definitions and storing into workspace
           name: Checking latest clamav, checking if s3 obj exists
           command: |
-            ./scripts/s3-obj-exist
+            source ./scripts/s3-eval-set-envs
       - persist_to_workspace:
           root: workspace
           paths:
