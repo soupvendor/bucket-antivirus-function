@@ -2,5 +2,5 @@
 
 export CLAMAV_LATEST=$(yum info clamav-update | grep Version | awk -F':' '{ print $2 }' | tail -n1 | tr -d '[:space:]')
 echo CLAMAV_LATEST=$CLAMAV_LATEST >> workspace/clamav-latest
-export REQUIRE_UPDATE=$(aws s3 ls s3://$S3_BUCKET/lambda-$CLAMAV_LATEST.zip > /dev/null; if [[ $? == 1 ]]; then export REQUIRE_UPDATE=true; else export REQUIRE_UPDATE=false; fi)
+export REQUIRE_UPDATE=$(aws s3 ls s3://$S3_BUCKET/lambda-$CLAMAV_LATEST.zip > /dev/null; if [[ $? == 1 ]]; then echo true; else echo false; fi)
 echo '{"require-update": '$REQUIRE_UPDATE'}' >> workspace/require-update.json
