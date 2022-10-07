@@ -64,6 +64,7 @@ jobs:
 workflows:
   version: 2
   make-sync-zip:
+    when: << pipeline.parameters.require-update >>
     jobs:
       - pre-commit-deps
       - pre-commit-test:
