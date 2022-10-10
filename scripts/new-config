@@ -75,3 +75,8 @@ workflows:
             - aws
           requires:
             - pre-commit-test
+  status-update:
+    when:
+      not:  <<pipeline.parameters.require-update >>
+    jobs:
+      - echo "Update not required."
